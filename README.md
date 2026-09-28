@@ -1,4 +1,4 @@
-# Sistema Meteorológico — versão básica
+# Sistema Meteorológico
 
 Autor: Miguel Badany Cerne
 
@@ -16,14 +16,16 @@ make
 make run
 ```
 
-O executável é gerado em `out/sistema_meteorologico`. A pasta `out/` é criada
-se necessário. Para executar diretamente:
+Cada arquivo de `src/` é compilado em um objeto `.o` dentro de `out/`.
+Esses objetos são ligados para gerar `out/sistema_meteorologico`. A pasta
+`out/` é criada se necessário. Para executar diretamente:
 
 ```sh
 ./out/sistema_meteorologico
 ```
 
-`make clean` remove somente esse executável, preservando código e dados.
+`make clean` remove os objetos `.o` e o executável de `out/`, preservando código
+e dados.
 Para trocar de compilador, use `make clean` e depois `make CXX=clang++`.
 O alvo `make sistema_meteorologico` também compila o programa.
 
@@ -48,13 +50,19 @@ sistema-meteorologico-completo/
 │   ├── exemplo-entrada.txt
 │   └── base-teste.txt
 └── out/
+    ├── main.o
+    ├── Estacao.o
+    ├── LeituraSensor.o
+    ├── SistemaMeteorologico.o
     └── sistema_meteorologico
 ```
 
 Os includes locais mantêm os nomes, como `#include "Estacao.hpp"`. A opção
 `-Ilibrary` informa ao compilador onde encontrar os cabeçalhos. O arquivo
-`compile_flags.txt` fornece as mesmas opções básicas ao editor/clangd.
-Alterações nos fontes, cabeçalhos ou Makefile acionam a recompilação.
+`compile_flags.txt` fornece as mesmas opções de compilação ao editor/clangd.
+Alterar um `.cpp` recompila seu objeto e atualiza o executável. Alterações nos
+cabeçalhos ou no Makefile recompilam os objetos. Sem alterações, `make` reutiliza
+os arquivos existentes. Todos os arquivos gerados ficam em `out/`.
 
 Para reformatar os arquivos com clang-format instalado:
 
@@ -78,8 +86,7 @@ clang-format -i src/*.cpp library/*.hpp
 
 Digite nomes sempre com a mesma grafia e use ponto para decimais. Uma entrada
 não numérica em um campo numérico encerra o programa com mensagem.
-Os dados ficam somente na memória. Não há Observer, persistência, limpeza de
-tela, seleção por listas ou relatórios adicionais.
+Os dados ficam na memória durante a execução.
 
 ## Bibliotecas usadas e referências dos slides
 
@@ -89,8 +96,7 @@ tela, seleção por listas ou relatórios adicionais.
 - `<iomanip>`: duas casas decimais — 06-referencias-sobrecargas-templates.pdf.
 
 `push_back` aparece em 29-stl-1.pdf. Referências e composição aparecem nas
-aulas 06 e 14. O programa não usa map, algoritmos prontos de ordenação,
-funções template próprias, herança ou bibliotecas externas.
+aulas 06 e 14. A ordenação é implementada com laços e trocas.
 
 ## Regras dos cálculos
 
@@ -114,6 +120,5 @@ e executa os itens 3, 4 e 5. As médias de temperatura de EST-CENTRO são
 20.33, 21.67, 23.00, 23.67 e 23.33. A previsão para o instante 8 é 24.14.
 
 `data/exemplo-entrada.txt` contém respostas ao menu e pode ser redirecionado
-para a entrada do programa. `data/base-teste.txt` é uma base salva pela versão
-antiga com persistência; foi preservada, mas não é lida pela versão básica e
-não deve ser usada como roteiro de entrada.
+para a entrada do programa. `data/base-teste.txt` contém dados em formato de
+armazenamento e não deve ser usado como roteiro de entrada do menu.

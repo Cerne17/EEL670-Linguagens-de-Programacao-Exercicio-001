@@ -8,7 +8,7 @@ CXX = g++
 CPPFLAGS = -Ilibrary
 CXXFLAGS = -Wall -Wextra -pedantic
 
-FONTES = src/main.cpp src/Estacao.cpp src/LeituraSensor.cpp src/SistemaMeteorologico.cpp
+OBJETOS = out/main.o out/Estacao.o out/LeituraSensor.o out/SistemaMeteorologico.o
 CABECALHOS = library/Estacao.hpp library/LeituraSensor.hpp library/SistemaMeteorologico.hpp
 EXECUTAVEL = out/sistema_meteorologico
 
@@ -18,8 +18,11 @@ all: $(EXECUTAVEL)
 
 sistema_meteorologico: $(EXECUTAVEL)
 
-$(EXECUTAVEL): $(FONTES) $(CABECALHOS) Makefile | out
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(FONTES) -o $(EXECUTAVEL)
+$(EXECUTAVEL): $(OBJETOS)
+	$(CXX) $(CXXFLAGS) $(OBJETOS) -o $(EXECUTAVEL)
+
+out/%.o: src/%.cpp $(CABECALHOS) Makefile | out
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
 
 out:
 	mkdir -p out
@@ -28,4 +31,4 @@ run: $(EXECUTAVEL)
 	./$(EXECUTAVEL)
 
 clean:
-	rm -f $(EXECUTAVEL)
+	rm -f $(OBJETOS) $(EXECUTAVEL)
