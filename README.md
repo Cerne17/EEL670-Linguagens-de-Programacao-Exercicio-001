@@ -96,13 +96,14 @@ Os dados ficam na memória durante a execução.
 - `<iomanip>`: duas casas decimais — 06-referencias-sobrecargas-templates.pdf.
 
 `push_back` aparece em 29-stl-1.pdf. Referências e composição aparecem nas
-aulas 06 e 14. A ordenação é implementada com laços e trocas.
+aulas 06 e 14. A ordenação é implementada com Bubble Sort, usando laços e trocas entre vizinhos.
 
 ## Regras dos cálculos
 
 Todas as séries são filtradas por grandeza. A inserção mantém a ordem dos
 instantes, começando em 1 e contando separadamente cada grandeza da estação.
-Sete leituras geram cinco médias de janela 3. A ordenação usa laços e trocas.
+Sete leituras geram cinco médias de janela 3. A ordenação usa Bubble Sort em ordem crescente, trocando médias e índices das
+estações juntos. Médias iguais mantêm a ordem de cadastro.
 A variação compara as duas últimas janelas, dividindo a diferença pelo módulo
 da média anterior. Com base zero ou menos de quatro leituras, o percentual
 fica indisponível. Exatamente +/-15% é normal.

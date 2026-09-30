@@ -115,21 +115,22 @@ void SistemaMeteorologico::ordenar_estacoes_e_indicar_variacoes(
     indices.push_back(static_cast<int>(i));
     medias.push_back(historico[historico.size() - 1]);
   }
-  // Ordenação crescente por seleção, apenas com laços e trocas.
-  for (std::size_t i = 0; i < medias.size(); i++) {
-    std::size_t menor = i;
-    for (std::size_t j = i + 1; j < medias.size(); j++) {
-      if (medias[j] < medias[menor]) {
-        menor = j;
+  // Bubble Sort: troca vizinhos e leva a maior média ao fim de cada passagem.
+  for (std::size_t limite = medias.size(); limite > 1; limite--) {
+    for (std::size_t j = 0; j + 1 < limite; j++) {
+      if (medias[j] > medias[j + 1]) {
+        double media_aux = medias[j];
+        medias[j] = medias[j + 1];
+        medias[j + 1] = media_aux;
+
+        // A estação acompanha sua média em cada troca.
+        int indice_aux = indices[j];
+        indices[j] = indices[j + 1];
+        indices[j + 1] = indice_aux;
       }
     }
-    double media_aux = medias[i];
-    medias[i] = medias[menor];
-    medias[menor] = media_aux;
-    int indice_aux = indices[i];
-    indices[i] = indices[menor];
-    indices[menor] = indice_aux;
   }
+
   std::cout << "\nEstações por média crescente de " << grandeza << ":\n";
   if (indices.size() == 0) {
     std::cout << "Nenhuma estação com dados suficientes.\n";
