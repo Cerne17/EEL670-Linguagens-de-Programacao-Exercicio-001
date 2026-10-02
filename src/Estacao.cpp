@@ -7,10 +7,28 @@
  */
 
 #include "Estacao.hpp"
+#include <iostream>
+
+bool Estacao::set_nome(const std::string& nome)
+{
+  bool tem_texto = false;
+  for (std::size_t i = 0; i < nome.size(); i++) {
+    if (nome[i] != ' ' && nome[i] != '\t' && nome[i] != '\r' && nome[i] != '\n') {
+      tem_texto = true;
+    }
+  }
+  if (!tem_texto) {
+    std::cout << "O nome da estação não pode ficar vazio.\n";
+    return false;
+  }
+  m_nome = nome;
+  return true;
+}
 
 Estacao::Estacao(const std::string& nome)
-  : m_nome(nome)
 {
+  m_nome = "Estação sem nome";
+  set_nome(nome);
 }
 
 const std::string& Estacao::get_nome() const
@@ -23,7 +41,7 @@ const std::vector<LeituraSensor>& Estacao::get_leituras() const
   return m_leituras;
 }
 
-void Estacao::inserir_leitura(const std::string& grandeza, double valor)
+bool Estacao::inserir_leitura(const std::string& grandeza, double valor)
 {
   int instante = 1;
   // Sem remoção de m_leituras, contar as anteriores fornece o próximo instante.
@@ -32,7 +50,12 @@ void Estacao::inserir_leitura(const std::string& grandeza, double valor)
       instante++;
     }
   }
-  m_leituras.push_back(LeituraSensor(grandeza, valor, instante));
+  LeituraSensor leitura("Grandeza sem nome", valor, instante);
+  if (!leitura.set_nome(grandeza)) {
+    return false;
+  }
+  m_leituras.push_back(leitura);
+  return true;
 }
 
 std::vector<LeituraSensor> Estacao::filtrar_leituras(

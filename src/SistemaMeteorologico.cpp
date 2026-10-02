@@ -21,10 +21,15 @@ int SistemaMeteorologico::buscar_estacao(const std::string& nome) const
 
 bool SistemaMeteorologico::inserir_estacao(const std::string& nome)
 {
-  if (nome == "" || buscar_estacao(nome) != -1) {
+  Estacao estacao("Estação sem nome");
+  if (!estacao.set_nome(nome)) {
     return false;
   }
-  m_estacoes.push_back(Estacao(nome));
+  if (buscar_estacao(nome) != -1) {
+    std::cout << "Já existe uma estação com esse nome.\n";
+    return false;
+  }
+  m_estacoes.push_back(estacao);
   return true;
 }
 
@@ -33,11 +38,11 @@ bool SistemaMeteorologico::inserir_leitura(const std::string& nome,
                                            double valor)
 {
   int indice = buscar_estacao(nome);
-  if (indice == -1 || grandeza == "") {
+  if (indice == -1) {
+    std::cout << "Estação não encontrada.\n";
     return false;
   }
-  m_estacoes[indice].inserir_leitura(grandeza, valor);
-  return true;
+  return m_estacoes[indice].inserir_leitura(grandeza, valor);
 }
 
 void SistemaMeteorologico::exibir_relatorio() const
@@ -93,6 +98,33 @@ bool SistemaMeteorologico::exibir_evolucao_medias(
     std::cout << '\n';
   }
   return true;
+}
+
+std::vector<std::string> SistemaMeteorologico::listar_grandezas() const
+{
+  std::vector<std::string> grandezas;
+
+  for (std::size_t i = 0; i < m_estacoes.size(); i++) {
+    const std::vector<LeituraSensor>& leituras = m_estacoes[i].get_leituras();
+
+    for (std::size_t j = 0; j < leituras.size(); j++) {
+      const std::string& nome = leituras[j].get_nome();
+      bool encontrada = false;
+
+      for (std::size_t k = 0; k < grandezas.size(); k++) {
+        if (grandezas[k] == nome) {
+          encontrada = true;
+          break;
+        }
+      }
+
+      if (!encontrada) {
+        grandezas.push_back(nome);
+      }
+    }
+  }
+
+  return grandezas;
 }
 
 void SistemaMeteorologico::ordenar_estacoes_e_indicar_variacoes(
