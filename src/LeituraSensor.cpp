@@ -13,7 +13,8 @@ bool LeituraSensor::set_nome(const std::string& nome)
 {
   bool tem_texto = false;
   for (std::size_t i = 0; i < nome.size(); i++) {
-    if (nome[i] != ' ' && nome[i] != '\t' && nome[i] != '\r' && nome[i] != '\n') {
+    if (nome[i] != ' ' && nome[i] != '\t' && nome[i] != '\r' &&
+        nome[i] != '\n') {
       tem_texto = true;
     }
   }

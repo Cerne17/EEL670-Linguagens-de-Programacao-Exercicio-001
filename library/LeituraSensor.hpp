@@ -20,9 +20,12 @@ private:
 public:
   bool set_nome(const std::string& nome);
   const std::string& get_nome() const;
+
   void set_valor(double valor);
   bool set_instante(int instante);
+
   double get_valor() const;
   int get_instante() const;
+
   LeituraSensor(const std::string& nome, double valor, int instante);
 };
